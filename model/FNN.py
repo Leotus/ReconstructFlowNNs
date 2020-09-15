@@ -33,7 +33,7 @@ decode_num = 30 # every group has decode_num datas
 input_size = 6 * decode_num # 6 * decode_num
 hidden_size = 5 # FNN hidden size
 target_size = 3 # 3 * 1
-num_epochs = 30
+num_epochs = 50
 batch_size = 100
 learning_rate = 0.001
 data_path = datapath_str[str(decode_num)] # data path
@@ -44,14 +44,27 @@ class NeuralNet(nn.Module):
     def __init__(self, input_size, hidden_size, target_size):
         super(NeuralNet, self).__init__()
         self.input_size = input_size
-        self.l1 = nn.Linear(input_size, hidden_size)
         self.relu = nn.ReLU()
-        self.l2 = nn.Linear(hidden_size, target_size)
+        self.l1 = nn.Linear(input_size, 1024)
+        self.l2 = nn.Linear(1024, 512)
+        self.l3 = nn.Linear(512, 1024)
+        self.l4 = nn.Linear(1024, 128)
+        self.l5 = nn.Linear(128, 16)
+        self.l6 = nn.Linear(16, target_size)
+
 
     def forward(self, x):
         out = self.l1(x)
         out = self.relu(out)
         out = self.l2(out)
+        out = self.relu(out)
+        out = self.l3(out)
+        out = self.relu(out)
+        out = self.l4(out)
+        out = self.relu(out)
+        out = self.l5(out)
+        out = self.relu(out)
+        out = self.l6(out)
         return out
 
 
@@ -89,7 +102,7 @@ if __name__ == '__main__':
     print(data_path)
     writer = SummaryWriter(f'runs/group_{decode_num}_fnn')
     # create dataset
-    dataset = FlowDataset(datapath=data_path,transform=Normalize(),decodenum=decode_num)
+    dataset = FlowDataset(datapath=data_path,decodenum=decode_num)
 
     test_size = int(len(dataset) * 0.2)
     train_size = len(dataset) - test_size
@@ -154,7 +167,7 @@ if __name__ == '__main__':
             running_loss += loss.item()
 
             if (i+1) % 500 == 0:
-                print (f'Epoch [{epoch+1}/{num_epochs}], Step [{i+1}/{n_total_steps}], Loss: {loss.item():.4f}')
+                print (f'Epoch [{epoch+1}/{num_epochs}], Step [{i+1}/{n_total_steps}], Loss: {loss.item():.8f}')
                 # print (f"inputs {inputs},targets {targets},outputs {outputs}")
                 ############## TENSORBOARD ########################
                 writer.add_scalar('training loss', running_loss / 500, epoch * n_total_steps + i)

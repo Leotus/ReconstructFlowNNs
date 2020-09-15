@@ -8,6 +8,8 @@
 #include <vtkStructuredGridWriter.h>
 #include <vtkPointData.h>
 #include <vtkDoubleArray.h>
+#include <torch/script.h>
+#include <torch/torch.h>
 #include "CoordTool.h"
 
 using namespace std;
@@ -25,9 +27,10 @@ private:
 	double* bounds;
 	vtkStructuredGrid* flowData;
 	vtkStructuredGridWriter* flowWriter;
-	vector<double*>* testdata;
+	vector<double>* testdata;
 	vtkDataArray* targetVel;
 	vtkPoints* targetPoints;
 	vector<int*>* coord;
+	torch::jit::script::Module model;
 	void GenerateOnePointFlowData(int i, vector<list<map<string, double>*>*>* meshContainsPoints, double x, double y, double z);
 };
