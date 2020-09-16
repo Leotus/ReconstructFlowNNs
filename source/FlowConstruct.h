@@ -21,6 +21,7 @@ public:
 	void constructData(vector<list<map<string, double>*>*>* meshContainsPoints, vtkStructuredGrid* oridata);
 	vtkStructuredGrid* getFlowData();
 	friend class CoordTool;
+	~FlowConstruct();
 private:
 	int oneGroupNum;
 	int* dims;

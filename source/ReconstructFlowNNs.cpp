@@ -75,7 +75,19 @@ int main()
    
     polyWriter->SetInputData(newpoly);
     polyWriter->Write();
-    
+
+    ptdat->Delete();
+    xdat->Delete();
+    ydat->Delete();
+    zdat->Delete();
+    newpoly->Delete();
+    lines->Delete();
+    newp->Delete();
+    line1->Delete();
+    list1->Delete();
+    line2->Delete();
+    list2->Delete();
+    polyWriter->Delete();
 /*----------------------------------------vtk poly data 测试---------------------------------------------------------*/
 
 
@@ -100,4 +112,17 @@ int main()
 
     /* todo : 对比流线及新流场数据，检验结果 */
     
+
+
+    //  清理工作
+    delete openFile;
+    oridats->Delete();
+    streamlinedats->Delete();
+    delete dims;
+    delete bounds;
+    delete meshContains;
+    // delete gTraindata;
+    // delete trdata;
+    delete flowConstruct;
+    newFlowData->Delete();
 }

@@ -20,6 +20,7 @@ public:
 	void generateData(vector<list<map<string, double>*>*>* meshContainsPoints,vtkStructuredGrid* oridata);
 	vector<vector<map<string, double>*>*>* getTrainData();
 	friend class CoordTool;
+	~GenerateTrainData();
 private:
 	int oneGroupNum;
 	ofstream outfile;

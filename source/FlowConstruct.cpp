@@ -126,4 +126,22 @@ void FlowConstruct::constructData(vector<list<map<string, double>*>*>* meshConta
 	flowData->GetPointData()->SetVectors(targetVel);
 	flowWriter->SetInputData(flowData);
 	flowWriter->Write();
+
+
+	ptdat->Delete();
+	xdat->Delete();
+	ydat->Delete();
+	zdat->Delete();
+	vel->Delete();
+}
+
+FlowConstruct::~FlowConstruct() {
+	delete dims;
+	delete bounds;
+	delete testdata;
+	delete coord;
+	flowData->Delete();
+	flowWriter->Delete();
+	targetVel->Delete();
+	targetPoints->Delete();
 }

@@ -14,6 +14,12 @@ public:
 	MeshContains(int* dim,double* bound);
 	void GenerateMeshContainsPoints(vtkPolyData* streamline);
 	vector<list<map<string,double>*>*>* GetMeshPoints() const;
+	~MeshContains()
+	{
+		delete meshContainsPoints;
+		delete dims;
+		delete bounds;
+	}
 private:
 	vector<list<map<string, double>*>*>* meshContainsPoints;
 	int* dims;

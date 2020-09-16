@@ -93,8 +93,21 @@ void GenerateTrainData::generateData(vector<list<map<string, double>*>*>* meshCo
 	// outfile << appendsum / 132840 << endl;
 	cout << appendsum / (132840 ) << endl;
 	outfile.close();
+
+	ptdat->Delete();
+	xdat->Delete();
+	ydat->Delete();
+	zdat->Delete();
+	vel->Delete();
 }
 
 vector<vector<map<string, double>*>*>* GenerateTrainData::getTrainData() {
 	return traindata;
+}
+
+GenerateTrainData::~GenerateTrainData() {
+	delete dims;
+	delete bounds;
+	delete traindata;
+	delete coord;
 }
