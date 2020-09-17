@@ -4,17 +4,12 @@
 
 #include <iostream>
 
-
-#include <vtkXMLPolyDataWriter.h>
-#include <vtkPolyLine.h>
-#include <vtkCellArray.h>
-
-
 #include "OpenFiles.h"
 #include "MeshContainPoints.h"
 #include "GenerateTrainData.h"
 #include "ValidateData.h"
 #include "FlowConstruct.h"
+#include "CalDiff.h"
 
 
 
@@ -36,68 +31,11 @@ int main()
     cout << "size of streamdata = " << streamlinedats -> GetNumberOfPoints() << endl;
     cout << "numbers of lines : " << streamlinedats -> GetNumberOfLines() << endl;
 
-
-
-
-/*----------------------------------------vtk poly data 测试---------------------------------------------------------*/
-    vtkPointData* ptdat = streamlinedats->GetPointData();
-    vtkDataArray* xdat = ptdat->GetArray("x");// x
-    vtkDataArray* ydat = ptdat->GetArray("y");// y
-    vtkDataArray* zdat = ptdat->GetArray("z");// z
-    vtkPolyData* newpoly = vtkPolyData::New();
-    vtkCellArray* lines = vtkCellArray::New();
-
-    vtkPoints* newp = vtkPoints::New();
-    vtkPolyLine* line1 = vtkPolyLine::New();
-    vtkIdList* list1 = line1->GetPointIds();
-    newp->SetNumberOfPoints(60);
-    for (int i = 0; i < 30; i++) {
-        newp->SetPoint(i, xdat->GetComponent(i, 0), ydat->GetComponent(i, 0), zdat->GetComponent(i, 0));
-        list1->InsertNextId(i);
-    }
-
-    vtkPolyLine* line2 = vtkPolyLine::New();
-    vtkIdList* list2 = line2->GetPointIds();
-    for (int i = 100; i < 130; i++) {
-        int j = i - 100 + 30;
-        newp->SetPoint(j, xdat->GetComponent(i, 0), ydat->GetComponent(i, 0), zdat->GetComponent(i, 0));
-        list2->InsertNextId(j);
-    }
-
-    lines->InsertNextCell(list1);
-    lines->InsertNextCell(list2);
-
-    newpoly->SetLines(lines);
-    newpoly->SetPoints(newp);
-
-    vtkXMLPolyDataWriter* polyWriter = vtkXMLPolyDataWriter::New();
-    polyWriter -> SetFileName("C:\\Users\\ll\\Desktop\\models\\test.vtp");
-   
-    polyWriter->SetInputData(newpoly);
-    polyWriter->Write();
-
-    ptdat->Delete();
-    xdat->Delete();
-    ydat->Delete();
-    zdat->Delete();
-    newpoly->Delete();
-    lines->Delete();
-    newp->Delete();
-    line1->Delete();
-    list1->Delete();
-    line2->Delete();
-    list2->Delete();
-    polyWriter->Delete();
-/*----------------------------------------vtk poly data 测试---------------------------------------------------------*/
-
-
-
-
     int* dims = oridats->GetDimensions();
     double* bounds = oridats->GetBounds();
     
-    MeshContains* meshContains = new MeshContains(dims,bounds);
-    meshContains->GenerateMeshContainsPoints(streamlinedats);
+    // MeshContains* meshContains = new MeshContains(dims,bounds);
+    // meshContains->GenerateMeshContainsPoints(streamlinedats);
 
     /* 通过流线生成训练数据 */
     //GenerateTrainData* gTraindata = new GenerateTrainData(dims,bounds, GROUP_NUM);
@@ -106,23 +44,26 @@ int main()
     //ValidateData::validateTrainData(trdata, streamlinedats,GROUP_NUM); // 验证训练数据
     
     /*  通过训练好的模型预测流场 */
-    FlowConstruct* flowConstruct = new FlowConstruct(dims, bounds, GROUP_NUM);
-    flowConstruct->constructData(meshContains->GetMeshPoints(), oridats);
-    vtkStructuredGrid* newFlowData = flowConstruct->getFlowData();
+    // FlowConstruct* flowConstruct = new FlowConstruct(dims, bounds, GROUP_NUM);
+    // flowConstruct->constructData(meshContains->GetMeshPoints(), oridats);
+    // vtkStructuredGrid* newFlowData = flowConstruct->getFlowData();
 
     /* todo : 对比流线及新流场数据，检验结果 */
-    
+
+    FileOpenClass* openFile2 = new FileOpenClass();
+    string newDataPath = "..\\data\\NewGridConfig.txt";
+    openFile2->OpenFile(newDataPath);
+    vtkStructuredGrid* newFlowData = openFile->GetGridData(); // 得到保存的新流场数据
+
+    CalDiff* disDiff = new CalDiff(streamlinedats,newFlowData);
 
 
     //  清理工作
     delete openFile;
-    oridats->Delete();
-    streamlinedats->Delete();
-    delete dims;
-    delete bounds;
-    delete meshContains;
+    delete openFile2;
+    // delete meshContains;
     // delete gTraindata;
     // delete trdata;
-    delete flowConstruct;
-    newFlowData->Delete();
+    // delete flowConstruct;
+    delete disDiff;
 }

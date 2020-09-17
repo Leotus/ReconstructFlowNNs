@@ -34,11 +34,6 @@ void MeshContains::GenerateMeshContainsPoints(vtkPolyData* streamline) {
 		n->insert(pair<string, double>("w", w));
 		(*meshContainsPoints)[index]->push_back(n);
 	}
-	ptdat->Delete();
-	vel->Delete();
-	xdata->Delete();
-	ydata->Delete();
-	zdata ->Delete();
 }
 
 vector<list<map<string, double>*>*>* MeshContains::GetMeshPoints() const {

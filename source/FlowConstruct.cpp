@@ -79,17 +79,17 @@ void FlowConstruct::constructData(vector<list<map<string, double>*>*>* meshConta
 		if (nx < 2 || ny < 2 || nz < 2) { // 边界点不考虑暂时
 			targetPoints->InsertPoint(i, x, y, z);
 			targetVel->InsertTuple(i, new double[3]{0,0,0});
-			cout << i << " - l :" << x << "," << y << "," << z << "\t";
-			cout << i << " - v :" << 0 << "," << 0 << "," << 0 << "\t";
-			cout << i << " - ov :" << u << "," << v << "," << w << endl;
+			// cout << i << " - l :" << x << "," << y << "," << z << "\t";
+			// cout << i << " - v :" << 0 << "," << 0 << "," << 0 << "\t";
+			// cout << i << " - ov :" << u << "," << v << "," << w << endl;
 			continue;
 		}
 		else if (nx > dims[0] - 3 || ny > dims[1] - 3 || nz > dims[2] - 3) {
 			targetPoints->InsertPoint(i, x, y, z);
 			targetVel->InsertTuple(i, new double[3]{ 0,0,0 });
-			cout << i << " - l :" << x << "," << y << "," << z << "\t";
-			cout << i << " - v :" << 0 << "," << 0 << "," << 0 << "\t";
-			cout << i << " - ov :" << u << "," << v << "," << w << endl;
+			// cout << i << " - l :" << x << "," << y << "," << z << "\t";
+			// cout << i << " - v :" << 0 << "," << 0 << "," << 0 << "\t";
+			// cout << i << " - ov :" << u << "," << v << "," << w << endl;
 			continue;
 		}
 		else {
@@ -115,9 +115,9 @@ void FlowConstruct::constructData(vector<list<map<string, double>*>*>* meshConta
 			targetVel->InsertTuple(i, new double[3]{ result[0].item().toDouble(),result[1].item().toDouble(),result[2].item().toDouble() });
 			targetPoints->InsertPoint(i, x, y, z);
 
-			cout << i << " - l :" << x << ","<< y << "," << z << "\t";
-			cout << i << " - v :" << result[0].item().toDouble() << "," << result[1].item().toDouble() <<  "," << result[2].item().toDouble() << "\t";
-			cout << i << " - ov :" << u << "," << v << "," << w << endl;
+			// cout << i << " - l :" << x << ","<< y << "," << z << "\t";
+			// cout << i << " - v :" << result[0].item().toDouble() << "," << result[1].item().toDouble() <<  "," << result[2].item().toDouble() << "\t";
+			// cout << i << " - ov :" << u << "," << v << "," << w << endl;
 			testdata->clear();
 		}
 	}
@@ -126,13 +126,6 @@ void FlowConstruct::constructData(vector<list<map<string, double>*>*>* meshConta
 	flowData->GetPointData()->SetVectors(targetVel);
 	flowWriter->SetInputData(flowData);
 	flowWriter->Write();
-
-
-	ptdat->Delete();
-	xdat->Delete();
-	ydat->Delete();
-	zdat->Delete();
-	vel->Delete();
 }
 
 FlowConstruct::~FlowConstruct() {

@@ -95,10 +95,6 @@ void GenerateTrainData::generateData(vector<list<map<string, double>*>*>* meshCo
 	outfile.close();
 
 	ptdat->Delete();
-	xdat->Delete();
-	ydat->Delete();
-	zdat->Delete();
-	vel->Delete();
 }
 
 vector<vector<map<string, double>*>*>* GenerateTrainData::getTrainData() {
